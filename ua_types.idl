@@ -1,0 +1,2247 @@
+ module UA {
+
+    // name clashes with IDL keywords are prevented by a "_" prefix
+
+    typedef boolean _Boolean;
+    union ListOfBoolean switch(boolean) { case true: sequence<_Boolean> Content; };
+
+    typedef char SByte ;
+    union ListOfSByte switch(boolean) { case true: sequence<SByte> Content; };
+
+    typedef octet Byte;
+    union ListOfByte switch(boolean) { case true: sequence<Byte> Content; };
+
+    typedef short Int16;
+    union ListOfInt16 switch(boolean) { case true: sequence<Int16> Content; };
+
+    typedef unsigned short UInt16;
+    union ListOfUInt16 switch(boolean) { case true: sequence<UInt16> Content; };
+
+    typedef long Int32;
+    union ListOfInt32 switch(boolean) { case true: sequence<Int32> Content; };
+
+    typedef long StatusCode;
+    union ListOfStatusCode switch(boolean) { case true: sequence<StatusCode> Content; };
+
+    typedef unsigned long UInt32;
+    union ListOfUInt32 switch(boolean) { case true: sequence<UInt32> Content; };
+
+    typedef long long Int64;
+    union ListOfInt64 switch(boolean) { case true: sequence<Int64> Content; };
+
+    typedef float _Float;
+    union ListOfFloat switch(boolean) { case true: sequence<_Float> Content; };
+
+    typedef float _Double;
+    union ListOfDouble switch(boolean) { case true: sequence<_Double> Content; };
+
+    typedef long long DateTime;
+    union ListOfDateTime switch(boolean) { case true: sequence<DateTime> Content; };
+
+    typedef unsigned long long UInt64;
+    union ListOfUInt64 switch(boolean) { case true: sequence<UInt64> Content; };
+
+    typedef ListOfByte _String;
+    union ListOfString switch(boolean) { case true: sequence<_String> Content; };
+
+    typedef ListOfByte ByteString;
+    union ListOfByteString switch(boolean) { case true: sequence<ByteString> Content; };
+
+    typedef ListOfByte XmlElement;
+    union ListOfXmlElement switch(boolean) { case true: sequence<XmlElement> Content; };
+
+    struct Guid {
+        UInt32 Data1;
+        UInt32 Data2;
+        UInt16 Data3;
+        Byte Data4[8];
+    };
+    union ListOfGuid switch(boolean) { case true: sequence<Guid> Content; };
+    
+    enum NodeIdContent {
+        NodeIdContentNumeric,
+        NodeIdContentString,
+        NodeIdContentGuid,
+        NodeIdContentByteString
+    };
+
+    union NodeIdIdentifier switch(NodeIdContent) {
+        case NodeIdContentNumeric: UInt32 Numeric;
+        case NodeIdContentString: _String _String;
+        case NodeIdContentGuid: Guid Guid;
+        case NodeIdContentByteString: ByteString ByteString;
+    };
+
+    struct NodeId {
+        unsigned short NamespaceIndex;
+        NodeIdIdentifier Identifier;
+    };
+    union ListOfNodeId switch(boolean) { case true: sequence<NodeId> Content; };
+
+    struct ExpandedNodeId {
+        NodeId NodeId;
+        _String NamespaceUri;
+        UInt32 ServerIndex;
+    };
+    union ListOfExpandedNodeId switch(boolean) { case true: sequence<ExpandedNodeId> Content; };
+
+    struct QualifiedName {
+        UInt16 NamespaceIndex;
+        _String Name;
+    };
+    union ListOfQualifiedName switch(boolean) { case true: sequence<QualifiedName> Content; };
+
+    struct LocalizedText {
+        _String Locale;
+        _String Text;
+    };
+    union ListOfLocalizedText switch(boolean) { case true: sequence<LocalizedText> Content; };
+
+    enum ExtensionObjectBodyType {
+        ExtensionObjectBodyTypeNoBody,
+        ExtensionObjectBodyTypeByteString,
+        ExtensionObjectBodyTypeXml
+    };
+
+    union ExtensionObjectBody switch(ExtensionObjectBodyType) {
+        case ExtensionObjectBodyTypeByteString: ByteString ByteString;
+        case ExtensionObjectBodyTypeXml: XmlElement Xml;
+    };
+    
+    struct ExtensionObject {
+        NodeId _TypeId;
+        ExtensionObjectBody Body;
+    };
+    union ListOfExtensionObject switch(boolean) { case true: sequence<ExtensionObject> Content; };
+
+    struct Variant; // forward declaration
+    union ListOfVariant switch(boolean) { case true: sequence<Variant> Content; };
+
+    struct DataValue {
+        sequence<Variant, 1> Value;
+        sequence<StatusCode, 1> Status;
+        sequence<DateTime, 1> SourceTimestamp;
+        sequence<UInt16, 1> SourcePicoseconds;
+        sequence<DateTime, 1> ServerTimestamp;
+        sequence<UInt16, 1> ServerPicoseconds;
+    };
+    union ListOfDataValue switch(boolean) { case true: sequence<DataValue> Content; };
+
+    struct DiagnosticInfo {
+        sequence<Int32, 1> SymbolicId;
+        sequence<Int32, 1> NamespaceUri;
+        sequence<Int32, 1> LocalizedText;
+        sequence<Int32, 1> Locale;
+        sequence<_String, 1> AdditionalInfo;
+        sequence<StatusCode, 1> InnerStatusCode;
+        sequence<DiagnosticInfo, 1> InnerDiagnosticInfo;
+    };
+    union ListOfDiagnosticInfo switch(boolean) { case true: sequence<DiagnosticInfo> Content; };
+
+    enum VariantContentType {
+        VariantContentTypeBoolean,
+        VariantContentTypeSByte,
+        VariantContentTypeByte,
+        VariantContentTypeInt16,
+        VariantContentTypeUInt16,
+        VariantContentTypeInt32,
+        VariantContentTypeUInt32,
+        VariantContentTypeFloat,
+        VariantContentTypeDouble,
+        VariantContentTypeString,
+        VariantContentTypeDateTime,
+        VariantContentTypeGuid,
+        VariantContentTypeByteString,
+        VariantContentTypeXmlElement,
+        VariantContentTypeNodeId,
+        VariantContentTypeExpandedNodeId,
+        VariantContentTypeStatusCode,
+        VariantContentTypeQualifiedName,
+        VariantContentTypeLocalizedText,
+        VariantContentTypeExtensionObject,
+        VariantContentTypeDataValue,
+        VariantContentTypeVariant,
+        VariantContentTypeDiagnosticInfo
+    };
+
+    union VariantContent switch(VariantContentType) {
+    case VariantContentTypeBoolean: ListOfBoolean _Boolean;
+    case VariantContentTypeSByte: ListOfSByte SByte;
+    case VariantContentTypeByte: ListOfByte Byte;
+    case VariantContentTypeInt16: ListOfInt16 Int16;
+    case VariantContentTypeUInt16: ListOfUInt16 UInt16;
+    case VariantContentTypeInt32: ListOfInt32 Int32;
+    case VariantContentTypeUInt32: ListOfUInt32 UInt32;
+    case VariantContentTypeFloat: ListOfFloat _Float;
+    case VariantContentTypeDouble: ListOfDouble _Double;
+    case VariantContentTypeString: ListOfString _String;
+    case VariantContentTypeDateTime: ListOfDateTime Datetime;
+    case VariantContentTypeGuid: ListOfGuid Guid;
+    case VariantContentTypeByteString: ListOfByteString ByteString;
+    case VariantContentTypeXmlElement: ListOfXmlElement Xmlelement;
+    case VariantContentTypeNodeId: ListOfNodeId NodeId;
+    case VariantContentTypeExpandedNodeId: ListOfExpandedNodeId ExpandedNodeId;
+    case VariantContentTypeStatusCode: ListOfStatusCode StatusCode;
+    case VariantContentTypeQualifiedName: ListOfQualifiedName QualifiedName;
+    case VariantContentTypeLocalizedText: ListOfLocalizedText LocalizedText;
+    case VariantContentTypeExtensionObject: ListOfExtensionObject ExtensionObject;
+    case VariantContentTypeDataValue: ListOfDataValue DataValue;
+    case VariantContentTypeVariant: ListOfVariant Variant;
+    case VariantContentTypeDiagnosticInfo: ListOfDiagnosticInfo DiagnosticInfo;
+    };
+
+    struct Variant {
+        _Boolean scalar; // force the VariantContent to contain just one element
+        VariantContent Content;
+        ListOfUInt32 ArrayDimensions;
+    };
+
+	enum NodeIdType {
+		NodeIdType_TwoByte, 
+		NodeIdType_FourByte, 
+		NodeIdType_Numeric, 
+		NodeIdType_String, 
+		NodeIdType_Guid, 
+		NodeIdType_ByteString
+	};
+	union ListOfNodeIdType switch(boolean) { case true: sequence<NodeIdType> Content; };
+
+	typedef ByteString ImageBMP;
+	union ListOfImageBMP switch(boolean) { case true: sequence<ImageBMP> Content; };
+
+	typedef ByteString ImageGIF;
+	union ListOfImageGIF switch(boolean) { case true: sequence<ImageGIF> Content; };
+
+	typedef ByteString ImageJPG;
+	union ListOfImageJPG switch(boolean) { case true: sequence<ImageJPG> Content; };
+
+	typedef ByteString ImagePNG;
+	union ListOfImagePNG switch(boolean) { case true: sequence<ImagePNG> Content; };
+
+	typedef ByteString BitFieldMaskDataType;
+	union ListOfBitFieldMaskDataType switch(boolean) { case true: sequence<BitFieldMaskDataType> Content; };
+
+	enum OpenFileMode {
+		OpenFileMode_Read, 
+		OpenFileMode_Write, 
+		OpenFileMode_EraseExisiting, 
+		OpenFileMode_Append
+	};
+	union ListOfOpenFileMode switch(boolean) { case true: sequence<OpenFileMode> Content; };
+
+	enum IdType {
+		IdType_Numeric, 
+		IdType_String, 
+		IdType_Guid, 
+		IdType_Opaque
+	};
+	union ListOfIdType switch(boolean) { case true: sequence<IdType> Content; };
+
+	enum NodeClass {
+		NodeClass_Unspecified, 
+		NodeClass_Object, 
+		NodeClass_Variable, 
+		NodeClass_Method, 
+		NodeClass_ObjectType, 
+		NodeClass_VariableType, 
+		NodeClass_ReferenceType, 
+		NodeClass_DataType, 
+		NodeClass_View
+	};
+	union ListOfNodeClass switch(boolean) { case true: sequence<NodeClass> Content; };
+
+	 struct ReferenceNode {
+		NodeId ReferenceTypeId;
+		Boolean IsInverse;
+		ExpandedNodeId TargetId;
+	};
+	union ListOfReferenceNode switch(boolean) { case true: sequence<ReferenceNode> Content; };
+
+	 struct Argument {
+		String Name;
+		NodeId DataType;
+		Int32 ValueRank;
+		ListOfUInt32 ArrayDimensions;
+		LocalizedText Description;
+	};
+	union ListOfArgument switch(boolean) { case true: sequence<Argument> Content; };
+
+	 struct EnumValueType {
+		Int64 Value;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+	};
+	union ListOfEnumValueType switch(boolean) { case true: sequence<EnumValueType> Content; };
+
+	typedef ByteString Duration;
+	union ListOfDuration switch(boolean) { case true: sequence<Duration> Content; };
+
+	typedef ByteString UtcTime;
+	union ListOfUtcTime switch(boolean) { case true: sequence<UtcTime> Content; };
+
+	typedef ByteString LocaleId;
+	union ListOfLocaleId switch(boolean) { case true: sequence<LocaleId> Content; };
+
+	 struct TimeZoneDataType {
+		Int16 Offset;
+		Boolean DaylightSavingInOffset;
+	};
+	union ListOfTimeZoneDataType switch(boolean) { case true: sequence<TimeZoneDataType> Content; };
+
+	typedef ByteString IntegerId;
+	union ListOfIntegerId switch(boolean) { case true: sequence<IntegerId> Content; };
+
+	enum ApplicationType {
+		ApplicationType_Server, 
+		ApplicationType_Client, 
+		ApplicationType_ClientAndServer, 
+		ApplicationType_DiscoveryServer
+	};
+	union ListOfApplicationType switch(boolean) { case true: sequence<ApplicationType> Content; };
+
+	 struct ApplicationDescription {
+		String ApplicationUri;
+		String ProductUri;
+		LocalizedText ApplicationName;
+		ApplicationType ApplicationType;
+		String GatewayServerUri;
+		String DiscoveryProfileUri;
+		ListOfString DiscoveryUrls;
+	};
+	union ListOfApplicationDescription switch(boolean) { case true: sequence<ApplicationDescription> Content; };
+
+	 struct RequestHeader {
+		NodeId AuthenticationToken;
+		DateTime Timestamp;
+		UInt32 RequestHandle;
+		UInt32 ReturnDiagnostics;
+		String AuditEntryId;
+		UInt32 TimeoutHint;
+		ExtensionObject AdditionalHeader;
+	};
+	union ListOfRequestHeader switch(boolean) { case true: sequence<RequestHeader> Content; };
+
+	 struct ResponseHeader {
+		DateTime Timestamp;
+		UInt32 RequestHandle;
+		StatusCode ServiceResult;
+		DiagnosticInfo ServiceDiagnostics;
+		ListOfString StringTable;
+		ExtensionObject AdditionalHeader;
+	};
+	union ListOfResponseHeader switch(boolean) { case true: sequence<ResponseHeader> Content; };
+
+	 struct ServiceFault {
+		ResponseHeader ResponseHeader;
+	};
+	union ListOfServiceFault switch(boolean) { case true: sequence<ServiceFault> Content; };
+
+	 struct FindServersRequest {
+		RequestHeader RequestHeader;
+		String EndpointUrl;
+		ListOfString LocaleIds;
+		ListOfString ServerUris;
+	};
+	union ListOfFindServersRequest switch(boolean) { case true: sequence<FindServersRequest> Content; };
+
+	 struct FindServersResponse {
+		ResponseHeader ResponseHeader;
+		ListOfApplicationDescription Servers;
+	};
+	union ListOfFindServersResponse switch(boolean) { case true: sequence<FindServersResponse> Content; };
+
+	typedef ByteString ApplicationInstanceCertificate;
+	union ListOfApplicationInstanceCertificate switch(boolean) { case true: sequence<ApplicationInstanceCertificate> Content; };
+
+	enum MessageSecurityMode {
+		MessageSecurityMode_Invalid, 
+		MessageSecurityMode_None, 
+		MessageSecurityMode_Sign, 
+		MessageSecurityMode_SignAndEncrypt
+	};
+	union ListOfMessageSecurityMode switch(boolean) { case true: sequence<MessageSecurityMode> Content; };
+
+	enum UserTokenType {
+		UserTokenType_Anonymous, 
+		UserTokenType_UserName, 
+		UserTokenType_Certificate, 
+		UserTokenType_IssuedToken
+	};
+	union ListOfUserTokenType switch(boolean) { case true: sequence<UserTokenType> Content; };
+
+	 struct UserTokenPolicy {
+		String PolicyId;
+		UserTokenType TokenType;
+		String IssuedTokenType;
+		String IssuerEndpointUrl;
+		String SecurityPolicyUri;
+	};
+	union ListOfUserTokenPolicy switch(boolean) { case true: sequence<UserTokenPolicy> Content; };
+
+	 struct EndpointDescription {
+		String EndpointUrl;
+		ApplicationDescription Server;
+		ByteString ServerCertificate;
+		MessageSecurityMode SecurityMode;
+		String SecurityPolicyUri;
+		ListOfUserTokenPolicy UserIdentityTokens;
+		String TransportProfileUri;
+		Byte SecurityLevel;
+	};
+	union ListOfEndpointDescription switch(boolean) { case true: sequence<EndpointDescription> Content; };
+
+	 struct GetEndpointsRequest {
+		RequestHeader RequestHeader;
+		String EndpointUrl;
+		ListOfString LocaleIds;
+		ListOfString ProfileUris;
+	};
+	union ListOfGetEndpointsRequest switch(boolean) { case true: sequence<GetEndpointsRequest> Content; };
+
+	 struct GetEndpointsResponse {
+		ResponseHeader ResponseHeader;
+		ListOfEndpointDescription Endpoints;
+	};
+	union ListOfGetEndpointsResponse switch(boolean) { case true: sequence<GetEndpointsResponse> Content; };
+
+	 struct RegisteredServer {
+		String ServerUri;
+		String ProductUri;
+		ListOfLocalizedText ServerNames;
+		ApplicationType ServerType;
+		String GatewayServerUri;
+		ListOfString DiscoveryUrls;
+		String SemaphoreFilePath;
+		Boolean IsOnline;
+	};
+	union ListOfRegisteredServer switch(boolean) { case true: sequence<RegisteredServer> Content; };
+
+	 struct RegisterServerRequest {
+		RequestHeader RequestHeader;
+		RegisteredServer Server;
+	};
+	union ListOfRegisterServerRequest switch(boolean) { case true: sequence<RegisterServerRequest> Content; };
+
+	 struct RegisterServerResponse {
+		ResponseHeader ResponseHeader;
+	};
+	union ListOfRegisterServerResponse switch(boolean) { case true: sequence<RegisterServerResponse> Content; };
+
+	enum SecurityTokenRequestType {
+		SecurityTokenRequestType_Issue, 
+		SecurityTokenRequestType_Renew
+	};
+	union ListOfSecurityTokenRequestType switch(boolean) { case true: sequence<SecurityTokenRequestType> Content; };
+
+	 struct ChannelSecurityToken {
+		UInt32 ChannelId;
+		UInt32 TokenId;
+		DateTime CreatedAt;
+		UInt32 RevisedLifetime;
+	};
+	union ListOfChannelSecurityToken switch(boolean) { case true: sequence<ChannelSecurityToken> Content; };
+
+	 struct OpenSecureChannelRequest {
+		RequestHeader RequestHeader;
+		UInt32 ClientProtocolVersion;
+		SecurityTokenRequestType RequestType;
+		MessageSecurityMode SecurityMode;
+		ByteString ClientNonce;
+		UInt32 RequestedLifetime;
+	};
+	union ListOfOpenSecureChannelRequest switch(boolean) { case true: sequence<OpenSecureChannelRequest> Content; };
+
+	 struct OpenSecureChannelResponse {
+		ResponseHeader ResponseHeader;
+		UInt32 ServerProtocolVersion;
+		ChannelSecurityToken SecurityToken;
+		ByteString ServerNonce;
+	};
+	union ListOfOpenSecureChannelResponse switch(boolean) { case true: sequence<OpenSecureChannelResponse> Content; };
+
+	 struct CloseSecureChannelRequest {
+		RequestHeader RequestHeader;
+	};
+	union ListOfCloseSecureChannelRequest switch(boolean) { case true: sequence<CloseSecureChannelRequest> Content; };
+
+	 struct CloseSecureChannelResponse {
+		ResponseHeader ResponseHeader;
+	};
+	union ListOfCloseSecureChannelResponse switch(boolean) { case true: sequence<CloseSecureChannelResponse> Content; };
+
+	 struct SignedSoftwareCertificate {
+		ByteString CertificateData;
+		ByteString Signature;
+	};
+	union ListOfSignedSoftwareCertificate switch(boolean) { case true: sequence<SignedSoftwareCertificate> Content; };
+
+	typedef ByteString SessionAuthenticationToken;
+	union ListOfSessionAuthenticationToken switch(boolean) { case true: sequence<SessionAuthenticationToken> Content; };
+
+	 struct SignatureData {
+		String Algorithm;
+		ByteString Signature;
+	};
+	union ListOfSignatureData switch(boolean) { case true: sequence<SignatureData> Content; };
+
+	 struct CreateSessionRequest {
+		RequestHeader RequestHeader;
+		ApplicationDescription ClientDescription;
+		String ServerUri;
+		String EndpointUrl;
+		String SessionName;
+		ByteString ClientNonce;
+		ByteString ClientCertificate;
+		Double RequestedSessionTimeout;
+		UInt32 MaxResponseMessageSize;
+	};
+	union ListOfCreateSessionRequest switch(boolean) { case true: sequence<CreateSessionRequest> Content; };
+
+	 struct CreateSessionResponse {
+		ResponseHeader ResponseHeader;
+		NodeId SessionId;
+		NodeId AuthenticationToken;
+		Double RevisedSessionTimeout;
+		ByteString ServerNonce;
+		ByteString ServerCertificate;
+		ListOfEndpointDescription ServerEndpoints;
+		ListOfSignedSoftwareCertificate ServerSoftwareCertificates;
+		SignatureData ServerSignature;
+		UInt32 MaxRequestMessageSize;
+	};
+	union ListOfCreateSessionResponse switch(boolean) { case true: sequence<CreateSessionResponse> Content; };
+
+	 struct UserIdentityToken {
+		String PolicyId;
+	};
+	union ListOfUserIdentityToken switch(boolean) { case true: sequence<UserIdentityToken> Content; };
+
+	 struct AnonymousIdentityToken {
+		String PolicyId;
+	};
+	union ListOfAnonymousIdentityToken switch(boolean) { case true: sequence<AnonymousIdentityToken> Content; };
+
+	 struct UserNameIdentityToken {
+		String PolicyId;
+		String UserName;
+		ByteString Password;
+		String EncryptionAlgorithm;
+	};
+	union ListOfUserNameIdentityToken switch(boolean) { case true: sequence<UserNameIdentityToken> Content; };
+
+	 struct X509IdentityToken {
+		String PolicyId;
+		ByteString CertificateData;
+	};
+	union ListOfX509IdentityToken switch(boolean) { case true: sequence<X509IdentityToken> Content; };
+
+	 struct IssuedIdentityToken {
+		String PolicyId;
+		ByteString TokenData;
+		String EncryptionAlgorithm;
+	};
+	union ListOfIssuedIdentityToken switch(boolean) { case true: sequence<IssuedIdentityToken> Content; };
+
+	 struct ActivateSessionRequest {
+		RequestHeader RequestHeader;
+		SignatureData ClientSignature;
+		ListOfSignedSoftwareCertificate ClientSoftwareCertificates;
+		ListOfString LocaleIds;
+		ExtensionObject UserIdentityToken;
+		SignatureData UserTokenSignature;
+	};
+	union ListOfActivateSessionRequest switch(boolean) { case true: sequence<ActivateSessionRequest> Content; };
+
+	 struct ActivateSessionResponse {
+		ResponseHeader ResponseHeader;
+		ByteString ServerNonce;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfActivateSessionResponse switch(boolean) { case true: sequence<ActivateSessionResponse> Content; };
+
+	 struct CloseSessionRequest {
+		RequestHeader RequestHeader;
+		Boolean DeleteSubscriptions;
+	};
+	union ListOfCloseSessionRequest switch(boolean) { case true: sequence<CloseSessionRequest> Content; };
+
+	 struct CloseSessionResponse {
+		ResponseHeader ResponseHeader;
+	};
+	union ListOfCloseSessionResponse switch(boolean) { case true: sequence<CloseSessionResponse> Content; };
+
+	 struct CancelRequest {
+		RequestHeader RequestHeader;
+		UInt32 RequestHandle;
+	};
+	union ListOfCancelRequest switch(boolean) { case true: sequence<CancelRequest> Content; };
+
+	 struct CancelResponse {
+		ResponseHeader ResponseHeader;
+		UInt32 CancelCount;
+	};
+	union ListOfCancelResponse switch(boolean) { case true: sequence<CancelResponse> Content; };
+
+	enum NodeAttributesMask {
+		NodeAttributesMask_None, 
+		NodeAttributesMask_AccessLevel, 
+		NodeAttributesMask_ArrayDimensions, 
+		NodeAttributesMask_BrowseName, 
+		NodeAttributesMask_ContainsNoLoops, 
+		NodeAttributesMask_DataType, 
+		NodeAttributesMask_Description, 
+		NodeAttributesMask_DisplayName, 
+		NodeAttributesMask_EventNotifier, 
+		NodeAttributesMask_Executable, 
+		NodeAttributesMask_Historizing, 
+		NodeAttributesMask_InverseName, 
+		NodeAttributesMask_IsAbstract, 
+		NodeAttributesMask_MinimumSamplingInterval, 
+		NodeAttributesMask_NodeClass, 
+		NodeAttributesMask_NodeId, 
+		NodeAttributesMask_Symmetric, 
+		NodeAttributesMask_UserAccessLevel, 
+		NodeAttributesMask_UserExecutable, 
+		NodeAttributesMask_UserWriteMask, 
+		NodeAttributesMask_ValueRank, 
+		NodeAttributesMask_WriteMask, 
+		NodeAttributesMask_Value, 
+		NodeAttributesMask_All, 
+		NodeAttributesMask_BaseNode, 
+		NodeAttributesMask_Object, 
+		NodeAttributesMask_ObjectTypeOrDataType, 
+		NodeAttributesMask_Variable, 
+		NodeAttributesMask_VariableType, 
+		NodeAttributesMask_Method, 
+		NodeAttributesMask_ReferenceType, 
+		NodeAttributesMask_View
+	};
+	union ListOfNodeAttributesMask switch(boolean) { case true: sequence<NodeAttributesMask> Content; };
+
+	 struct NodeAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+	};
+	union ListOfNodeAttributes switch(boolean) { case true: sequence<NodeAttributes> Content; };
+
+	 struct ObjectAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Byte EventNotifier;
+	};
+	union ListOfObjectAttributes switch(boolean) { case true: sequence<ObjectAttributes> Content; };
+
+	 struct VariableAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Variant Value;
+		NodeId DataType;
+		Int32 ValueRank;
+		ListOfUInt32 ArrayDimensions;
+		Byte AccessLevel;
+		Byte UserAccessLevel;
+		Double MinimumSamplingInterval;
+		Boolean Historizing;
+	};
+	union ListOfVariableAttributes switch(boolean) { case true: sequence<VariableAttributes> Content; };
+
+	 struct MethodAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Boolean Executable;
+		Boolean UserExecutable;
+	};
+	union ListOfMethodAttributes switch(boolean) { case true: sequence<MethodAttributes> Content; };
+
+	 struct ObjectTypeAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Boolean IsAbstract;
+	};
+	union ListOfObjectTypeAttributes switch(boolean) { case true: sequence<ObjectTypeAttributes> Content; };
+
+	 struct VariableTypeAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Variant Value;
+		NodeId DataType;
+		Int32 ValueRank;
+		ListOfUInt32 ArrayDimensions;
+		Boolean IsAbstract;
+	};
+	union ListOfVariableTypeAttributes switch(boolean) { case true: sequence<VariableTypeAttributes> Content; };
+
+	 struct ReferenceTypeAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Boolean IsAbstract;
+		Boolean Symmetric;
+		LocalizedText InverseName;
+	};
+	union ListOfReferenceTypeAttributes switch(boolean) { case true: sequence<ReferenceTypeAttributes> Content; };
+
+	 struct DataTypeAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Boolean IsAbstract;
+	};
+	union ListOfDataTypeAttributes switch(boolean) { case true: sequence<DataTypeAttributes> Content; };
+
+	 struct ViewAttributes {
+		UInt32 SpecifiedAttributes;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		Boolean ContainsNoLoops;
+		Byte EventNotifier;
+	};
+	union ListOfViewAttributes switch(boolean) { case true: sequence<ViewAttributes> Content; };
+
+	 struct AddNodesItem {
+		ExpandedNodeId ParentNodeId;
+		NodeId ReferenceTypeId;
+		ExpandedNodeId RequestedNewNodeId;
+		QualifiedName BrowseName;
+		NodeClass NodeClass;
+		ExtensionObject NodeAttributes;
+		ExpandedNodeId TypeDefinition;
+	};
+	union ListOfAddNodesItem switch(boolean) { case true: sequence<AddNodesItem> Content; };
+
+	 struct AddNodesResult {
+		StatusCode StatusCode;
+		NodeId AddedNodeId;
+	};
+	union ListOfAddNodesResult switch(boolean) { case true: sequence<AddNodesResult> Content; };
+
+	 struct AddNodesRequest {
+		RequestHeader RequestHeader;
+		ListOfAddNodesItem NodesToAdd;
+	};
+	union ListOfAddNodesRequest switch(boolean) { case true: sequence<AddNodesRequest> Content; };
+
+	 struct AddNodesResponse {
+		ResponseHeader ResponseHeader;
+		ListOfAddNodesResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfAddNodesResponse switch(boolean) { case true: sequence<AddNodesResponse> Content; };
+
+	 struct AddReferencesItem {
+		NodeId SourceNodeId;
+		NodeId ReferenceTypeId;
+		Boolean IsForward;
+		String TargetServerUri;
+		ExpandedNodeId TargetNodeId;
+		NodeClass TargetNodeClass;
+	};
+	union ListOfAddReferencesItem switch(boolean) { case true: sequence<AddReferencesItem> Content; };
+
+	 struct AddReferencesRequest {
+		RequestHeader RequestHeader;
+		ListOfAddReferencesItem ReferencesToAdd;
+	};
+	union ListOfAddReferencesRequest switch(boolean) { case true: sequence<AddReferencesRequest> Content; };
+
+	 struct AddReferencesResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfAddReferencesResponse switch(boolean) { case true: sequence<AddReferencesResponse> Content; };
+
+	 struct DeleteNodesItem {
+		NodeId NodeId;
+		Boolean DeleteTargetReferences;
+	};
+	union ListOfDeleteNodesItem switch(boolean) { case true: sequence<DeleteNodesItem> Content; };
+
+	 struct DeleteNodesRequest {
+		RequestHeader RequestHeader;
+		ListOfDeleteNodesItem NodesToDelete;
+	};
+	union ListOfDeleteNodesRequest switch(boolean) { case true: sequence<DeleteNodesRequest> Content; };
+
+	 struct DeleteNodesResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfDeleteNodesResponse switch(boolean) { case true: sequence<DeleteNodesResponse> Content; };
+
+	 struct DeleteReferencesItem {
+		NodeId SourceNodeId;
+		NodeId ReferenceTypeId;
+		Boolean IsForward;
+		ExpandedNodeId TargetNodeId;
+		Boolean DeleteBidirectional;
+	};
+	union ListOfDeleteReferencesItem switch(boolean) { case true: sequence<DeleteReferencesItem> Content; };
+
+	 struct DeleteReferencesRequest {
+		RequestHeader RequestHeader;
+		ListOfDeleteReferencesItem ReferencesToDelete;
+	};
+	union ListOfDeleteReferencesRequest switch(boolean) { case true: sequence<DeleteReferencesRequest> Content; };
+
+	 struct DeleteReferencesResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfDeleteReferencesResponse switch(boolean) { case true: sequence<DeleteReferencesResponse> Content; };
+
+	enum AttributeWriteMask {
+		AttributeWriteMask_None, 
+		AttributeWriteMask_AccessLevel, 
+		AttributeWriteMask_ArrayDimensions, 
+		AttributeWriteMask_BrowseName, 
+		AttributeWriteMask_ContainsNoLoops, 
+		AttributeWriteMask_DataType, 
+		AttributeWriteMask_Description, 
+		AttributeWriteMask_DisplayName, 
+		AttributeWriteMask_EventNotifier, 
+		AttributeWriteMask_Executable, 
+		AttributeWriteMask_Historizing, 
+		AttributeWriteMask_InverseName, 
+		AttributeWriteMask_IsAbstract, 
+		AttributeWriteMask_MinimumSamplingInterval, 
+		AttributeWriteMask_NodeClass, 
+		AttributeWriteMask_NodeId, 
+		AttributeWriteMask_Symmetric, 
+		AttributeWriteMask_UserAccessLevel, 
+		AttributeWriteMask_UserExecutable, 
+		AttributeWriteMask_UserWriteMask, 
+		AttributeWriteMask_ValueRank, 
+		AttributeWriteMask_WriteMask, 
+		AttributeWriteMask_ValueForVariableType
+	};
+	union ListOfAttributeWriteMask switch(boolean) { case true: sequence<AttributeWriteMask> Content; };
+
+	enum BrowseDirection {
+		BrowseDirection_Forward, 
+		BrowseDirection_Inverse, 
+		BrowseDirection_Both
+	};
+	union ListOfBrowseDirection switch(boolean) { case true: sequence<BrowseDirection> Content; };
+
+	 struct ViewDescription {
+		NodeId ViewId;
+		DateTime Timestamp;
+		UInt32 ViewVersion;
+	};
+	union ListOfViewDescription switch(boolean) { case true: sequence<ViewDescription> Content; };
+
+	 struct BrowseDescription {
+		NodeId NodeId;
+		BrowseDirection BrowseDirection;
+		NodeId ReferenceTypeId;
+		Boolean IncludeSubtypes;
+		UInt32 NodeClassMask;
+		UInt32 ResultMask;
+	};
+	union ListOfBrowseDescription switch(boolean) { case true: sequence<BrowseDescription> Content; };
+
+	enum BrowseResultMask {
+		BrowseResultMask_None, 
+		BrowseResultMask_ReferenceTypeId, 
+		BrowseResultMask_IsForward, 
+		BrowseResultMask_NodeClass, 
+		BrowseResultMask_BrowseName, 
+		BrowseResultMask_DisplayName, 
+		BrowseResultMask_TypeDefinition, 
+		BrowseResultMask_All, 
+		BrowseResultMask_ReferenceTypeInfo, 
+		BrowseResultMask_TargetInfo
+	};
+	union ListOfBrowseResultMask switch(boolean) { case true: sequence<BrowseResultMask> Content; };
+
+	 struct ReferenceDescription {
+		NodeId ReferenceTypeId;
+		Boolean IsForward;
+		ExpandedNodeId NodeId;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		NodeClass NodeClass;
+		ExpandedNodeId TypeDefinition;
+	};
+	union ListOfReferenceDescription switch(boolean) { case true: sequence<ReferenceDescription> Content; };
+
+	typedef ByteString ContinuationPoint;
+	union ListOfContinuationPoint switch(boolean) { case true: sequence<ContinuationPoint> Content; };
+
+	 struct BrowseResult {
+		StatusCode StatusCode;
+		ByteString ContinuationPoint;
+		ListOfReferenceDescription References;
+	};
+	union ListOfBrowseResult switch(boolean) { case true: sequence<BrowseResult> Content; };
+
+	 struct BrowseRequest {
+		RequestHeader RequestHeader;
+		ViewDescription View;
+		UInt32 RequestedMaxReferencesPerNode;
+		ListOfBrowseDescription NodesToBrowse;
+	};
+	union ListOfBrowseRequest switch(boolean) { case true: sequence<BrowseRequest> Content; };
+
+	 struct BrowseResponse {
+		ResponseHeader ResponseHeader;
+		ListOfBrowseResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfBrowseResponse switch(boolean) { case true: sequence<BrowseResponse> Content; };
+
+	 struct BrowseNextRequest {
+		RequestHeader RequestHeader;
+		Boolean ReleaseContinuationPoints;
+		ListOfByteString ContinuationPoints;
+	};
+	union ListOfBrowseNextRequest switch(boolean) { case true: sequence<BrowseNextRequest> Content; };
+
+	 struct BrowseNextResponse {
+		ResponseHeader ResponseHeader;
+		ListOfBrowseResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfBrowseNextResponse switch(boolean) { case true: sequence<BrowseNextResponse> Content; };
+
+	 struct RelativePathElement {
+		NodeId ReferenceTypeId;
+		Boolean IsInverse;
+		Boolean IncludeSubtypes;
+		QualifiedName TargetName;
+	};
+	union ListOfRelativePathElement switch(boolean) { case true: sequence<RelativePathElement> Content; };
+
+	 struct RelativePath {
+		ListOfRelativePathElement Elements;
+	};
+	union ListOfRelativePath switch(boolean) { case true: sequence<RelativePath> Content; };
+
+	 struct BrowsePath {
+		NodeId StartingNode;
+		RelativePath RelativePath;
+	};
+	union ListOfBrowsePath switch(boolean) { case true: sequence<BrowsePath> Content; };
+
+	 struct BrowsePathTarget {
+		ExpandedNodeId TargetId;
+		UInt32 RemainingPathIndex;
+	};
+	union ListOfBrowsePathTarget switch(boolean) { case true: sequence<BrowsePathTarget> Content; };
+
+	 struct BrowsePathResult {
+		StatusCode StatusCode;
+		ListOfBrowsePathTarget Targets;
+	};
+	union ListOfBrowsePathResult switch(boolean) { case true: sequence<BrowsePathResult> Content; };
+
+	 struct TranslateBrowsePathsToNodeIdsRequest {
+		RequestHeader RequestHeader;
+		ListOfBrowsePath BrowsePaths;
+	};
+	union ListOfTranslateBrowsePathsToNodeIdsRequest switch(boolean) { case true: sequence<TranslateBrowsePathsToNodeIdsRequest> Content; };
+
+	 struct TranslateBrowsePathsToNodeIdsResponse {
+		ResponseHeader ResponseHeader;
+		ListOfBrowsePathResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfTranslateBrowsePathsToNodeIdsResponse switch(boolean) { case true: sequence<TranslateBrowsePathsToNodeIdsResponse> Content; };
+
+	 struct RegisterNodesRequest {
+		RequestHeader RequestHeader;
+		ListOfNodeId NodesToRegister;
+	};
+	union ListOfRegisterNodesRequest switch(boolean) { case true: sequence<RegisterNodesRequest> Content; };
+
+	 struct RegisterNodesResponse {
+		ResponseHeader ResponseHeader;
+		ListOfNodeId RegisteredNodeIds;
+	};
+	union ListOfRegisterNodesResponse switch(boolean) { case true: sequence<RegisterNodesResponse> Content; };
+
+	 struct UnregisterNodesRequest {
+		RequestHeader RequestHeader;
+		ListOfNodeId NodesToUnregister;
+	};
+	union ListOfUnregisterNodesRequest switch(boolean) { case true: sequence<UnregisterNodesRequest> Content; };
+
+	 struct UnregisterNodesResponse {
+		ResponseHeader ResponseHeader;
+	};
+	union ListOfUnregisterNodesResponse switch(boolean) { case true: sequence<UnregisterNodesResponse> Content; };
+
+	typedef ByteString Counter;
+	union ListOfCounter switch(boolean) { case true: sequence<Counter> Content; };
+
+	typedef ByteString NumericRange;
+	union ListOfNumericRange switch(boolean) { case true: sequence<NumericRange> Content; };
+
+	typedef ByteString Time;
+	union ListOfTime switch(boolean) { case true: sequence<Time> Content; };
+
+	typedef ByteString Date;
+	union ListOfDate switch(boolean) { case true: sequence<Date> Content; };
+
+	 struct EndpointConfiguration {
+		Int32 OperationTimeout;
+		Boolean UseBinaryEncoding;
+		Int32 MaxStringLength;
+		Int32 MaxByteStringLength;
+		Int32 MaxArrayLength;
+		Int32 MaxMessageSize;
+		Int32 MaxBufferSize;
+		Int32 ChannelLifetime;
+		Int32 SecurityTokenLifetime;
+	};
+	union ListOfEndpointConfiguration switch(boolean) { case true: sequence<EndpointConfiguration> Content; };
+
+	enum ComplianceLevel {
+		ComplianceLevel_Untested, 
+		ComplianceLevel_Partial, 
+		ComplianceLevel_SelfTested, 
+		ComplianceLevel_Certified
+	};
+	union ListOfComplianceLevel switch(boolean) { case true: sequence<ComplianceLevel> Content; };
+
+	 struct SupportedProfile {
+		String OrganizationUri;
+		String ProfileId;
+		String ComplianceTool;
+		DateTime ComplianceDate;
+		ComplianceLevel ComplianceLevel;
+		ListOfString UnsupportedUnitIds;
+	};
+	union ListOfSupportedProfile switch(boolean) { case true: sequence<SupportedProfile> Content; };
+
+	 struct SoftwareCertificate {
+		String ProductName;
+		String ProductUri;
+		String VendorName;
+		ByteString VendorProductCertificate;
+		String SoftwareVersion;
+		String BuildNumber;
+		DateTime BuildDate;
+		String IssuedBy;
+		DateTime IssueDate;
+		ListOfSupportedProfile SupportedProfiles;
+	};
+	union ListOfSoftwareCertificate switch(boolean) { case true: sequence<SoftwareCertificate> Content; };
+
+	 struct QueryDataDescription {
+		RelativePath RelativePath;
+		UInt32 AttributeId;
+		String IndexRange;
+	};
+	union ListOfQueryDataDescription switch(boolean) { case true: sequence<QueryDataDescription> Content; };
+
+	 struct NodeTypeDescription {
+		ExpandedNodeId TypeDefinitionNode;
+		Boolean IncludeSubTypes;
+		ListOfQueryDataDescription DataToReturn;
+	};
+	union ListOfNodeTypeDescription switch(boolean) { case true: sequence<NodeTypeDescription> Content; };
+
+	enum FilterOperator {
+		FilterOperator_Equals, 
+		FilterOperator_IsNull, 
+		FilterOperator_GreaterThan, 
+		FilterOperator_LessThan, 
+		FilterOperator_GreaterThanOrEqual, 
+		FilterOperator_LessThanOrEqual, 
+		FilterOperator_Like, 
+		FilterOperator_Not, 
+		FilterOperator_Between, 
+		FilterOperator_InList, 
+		FilterOperator_And, 
+		FilterOperator_Or, 
+		FilterOperator_Cast, 
+		FilterOperator_InView, 
+		FilterOperator_OfType, 
+		FilterOperator_RelatedTo, 
+		FilterOperator_BitwiseAnd, 
+		FilterOperator_BitwiseOr
+	};
+	union ListOfFilterOperator switch(boolean) { case true: sequence<FilterOperator> Content; };
+
+	 struct QueryDataSet {
+		ExpandedNodeId NodeId;
+		ExpandedNodeId TypeDefinitionNode;
+		ListOfVariant Values;
+	};
+	union ListOfQueryDataSet switch(boolean) { case true: sequence<QueryDataSet> Content; };
+
+	 struct NodeReference {
+		NodeId NodeId;
+		NodeId ReferenceTypeId;
+		Boolean IsForward;
+		ListOfNodeId ReferencedNodeIds;
+	};
+	union ListOfNodeReference switch(boolean) { case true: sequence<NodeReference> Content; };
+
+	 struct ContentFilterElement {
+		FilterOperator FilterOperator;
+		ListOfExtensionObject FilterOperands;
+	};
+	union ListOfContentFilterElement switch(boolean) { case true: sequence<ContentFilterElement> Content; };
+
+	 struct ContentFilter {
+		ListOfContentFilterElement Elements;
+	};
+	union ListOfContentFilter switch(boolean) { case true: sequence<ContentFilter> Content; };
+
+	 struct ElementOperand {
+		UInt32 Index;
+	};
+	union ListOfElementOperand switch(boolean) { case true: sequence<ElementOperand> Content; };
+
+	 struct LiteralOperand {
+		Variant Value;
+	};
+	union ListOfLiteralOperand switch(boolean) { case true: sequence<LiteralOperand> Content; };
+
+	 struct AttributeOperand {
+		NodeId NodeId;
+		String Alias;
+		RelativePath BrowsePath;
+		UInt32 AttributeId;
+		String IndexRange;
+	};
+	union ListOfAttributeOperand switch(boolean) { case true: sequence<AttributeOperand> Content; };
+
+	 struct SimpleAttributeOperand {
+		NodeId TypeDefinitionId;
+		ListOfQualifiedName BrowsePath;
+		UInt32 AttributeId;
+		String IndexRange;
+	};
+	union ListOfSimpleAttributeOperand switch(boolean) { case true: sequence<SimpleAttributeOperand> Content; };
+
+	 struct ContentFilterElementResult {
+		StatusCode StatusCode;
+		ListOfStatusCode OperandStatusCodes;
+		ListOfDiagnosticInfo OperandDiagnosticInfos;
+	};
+	union ListOfContentFilterElementResult switch(boolean) { case true: sequence<ContentFilterElementResult> Content; };
+
+	 struct ContentFilterResult {
+		ListOfContentFilterElementResult ElementResults;
+		ListOfDiagnosticInfo ElementDiagnosticInfos;
+	};
+	union ListOfContentFilterResult switch(boolean) { case true: sequence<ContentFilterResult> Content; };
+
+	 struct ParsingResult {
+		StatusCode StatusCode;
+		ListOfStatusCode DataStatusCodes;
+		ListOfDiagnosticInfo DataDiagnosticInfos;
+	};
+	union ListOfParsingResult switch(boolean) { case true: sequence<ParsingResult> Content; };
+
+	 struct QueryFirstRequest {
+		RequestHeader RequestHeader;
+		ViewDescription View;
+		ListOfNodeTypeDescription NodeTypes;
+		ContentFilter Filter;
+		UInt32 MaxDataSetsToReturn;
+		UInt32 MaxReferencesToReturn;
+	};
+	union ListOfQueryFirstRequest switch(boolean) { case true: sequence<QueryFirstRequest> Content; };
+
+	 struct QueryFirstResponse {
+		ResponseHeader ResponseHeader;
+		ListOfQueryDataSet QueryDataSets;
+		ByteString ContinuationPoint;
+		ListOfParsingResult ParsingResults;
+		ListOfDiagnosticInfo DiagnosticInfos;
+		ContentFilterResult FilterResult;
+	};
+	union ListOfQueryFirstResponse switch(boolean) { case true: sequence<QueryFirstResponse> Content; };
+
+	 struct QueryNextRequest {
+		RequestHeader RequestHeader;
+		Boolean ReleaseContinuationPoint;
+		ByteString ContinuationPoint;
+	};
+	union ListOfQueryNextRequest switch(boolean) { case true: sequence<QueryNextRequest> Content; };
+
+	 struct QueryNextResponse {
+		ResponseHeader ResponseHeader;
+		ListOfQueryDataSet QueryDataSets;
+		ByteString RevisedContinuationPoint;
+	};
+	union ListOfQueryNextResponse switch(boolean) { case true: sequence<QueryNextResponse> Content; };
+
+	enum TimestampsToReturn {
+		TimestampsToReturn_Source, 
+		TimestampsToReturn_Server, 
+		TimestampsToReturn_Both, 
+		TimestampsToReturn_Neither
+	};
+	union ListOfTimestampsToReturn switch(boolean) { case true: sequence<TimestampsToReturn> Content; };
+
+	 struct ReadValueId {
+		NodeId NodeId;
+		UInt32 AttributeId;
+		String IndexRange;
+		QualifiedName DataEncoding;
+	};
+	union ListOfReadValueId switch(boolean) { case true: sequence<ReadValueId> Content; };
+
+	 struct ReadRequest {
+		RequestHeader RequestHeader;
+		Double MaxAge;
+		TimestampsToReturn TimestampsToReturn;
+		ListOfReadValueId NodesToRead;
+	};
+	union ListOfReadRequest switch(boolean) { case true: sequence<ReadRequest> Content; };
+
+	 struct ReadResponse {
+		ResponseHeader ResponseHeader;
+		ListOfDataValue Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfReadResponse switch(boolean) { case true: sequence<ReadResponse> Content; };
+
+	 struct HistoryReadValueId {
+		NodeId NodeId;
+		String IndexRange;
+		QualifiedName DataEncoding;
+		ByteString ContinuationPoint;
+	};
+	union ListOfHistoryReadValueId switch(boolean) { case true: sequence<HistoryReadValueId> Content; };
+
+	 struct HistoryReadResult {
+		StatusCode StatusCode;
+		ByteString ContinuationPoint;
+		ExtensionObject HistoryData;
+	};
+	union ListOfHistoryReadResult switch(boolean) { case true: sequence<HistoryReadResult> Content; };
+
+	 struct ReadRawModifiedDetails {
+		Boolean IsReadModified;
+		DateTime StartTime;
+		DateTime EndTime;
+		UInt32 NumValuesPerNode;
+		Boolean ReturnBounds;
+	};
+	union ListOfReadRawModifiedDetails switch(boolean) { case true: sequence<ReadRawModifiedDetails> Content; };
+
+	 struct ReadAtTimeDetails {
+		ListOfDateTime ReqTimes;
+		Boolean UseSimpleBounds;
+	};
+	union ListOfReadAtTimeDetails switch(boolean) { case true: sequence<ReadAtTimeDetails> Content; };
+
+	 struct HistoryData {
+		ListOfDataValue DataValues;
+	};
+	union ListOfHistoryData switch(boolean) { case true: sequence<HistoryData> Content; };
+
+	 struct HistoryReadRequest {
+		RequestHeader RequestHeader;
+		ExtensionObject HistoryReadDetails;
+		TimestampsToReturn TimestampsToReturn;
+		Boolean ReleaseContinuationPoints;
+		ListOfHistoryReadValueId NodesToRead;
+	};
+	union ListOfHistoryReadRequest switch(boolean) { case true: sequence<HistoryReadRequest> Content; };
+
+	 struct HistoryReadResponse {
+		ResponseHeader ResponseHeader;
+		ListOfHistoryReadResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfHistoryReadResponse switch(boolean) { case true: sequence<HistoryReadResponse> Content; };
+
+	 struct WriteValue {
+		NodeId NodeId;
+		UInt32 AttributeId;
+		String IndexRange;
+		DataValue Value;
+	};
+	union ListOfWriteValue switch(boolean) { case true: sequence<WriteValue> Content; };
+
+	 struct WriteRequest {
+		RequestHeader RequestHeader;
+		ListOfWriteValue NodesToWrite;
+	};
+	union ListOfWriteRequest switch(boolean) { case true: sequence<WriteRequest> Content; };
+
+	 struct WriteResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfWriteResponse switch(boolean) { case true: sequence<WriteResponse> Content; };
+
+	 struct HistoryUpdateDetails {
+		NodeId NodeId;
+	};
+	union ListOfHistoryUpdateDetails switch(boolean) { case true: sequence<HistoryUpdateDetails> Content; };
+
+	enum HistoryUpdateType {
+		HistoryUpdateType_Insert, 
+		HistoryUpdateType_Replace, 
+		HistoryUpdateType_Update, 
+		HistoryUpdateType_Delete
+	};
+	union ListOfHistoryUpdateType switch(boolean) { case true: sequence<HistoryUpdateType> Content; };
+
+	enum PerformUpdateType {
+		PerformUpdateType_Insert, 
+		PerformUpdateType_Replace, 
+		PerformUpdateType_Update, 
+		PerformUpdateType_Remove
+	};
+	union ListOfPerformUpdateType switch(boolean) { case true: sequence<PerformUpdateType> Content; };
+
+	 struct UpdateDataDetails {
+		NodeId NodeId;
+		PerformUpdateType PerformInsertReplace;
+		ListOfDataValue UpdateValues;
+	};
+	union ListOfUpdateDataDetails switch(boolean) { case true: sequence<UpdateDataDetails> Content; };
+
+	 struct UpdateStructureDataDetails {
+		NodeId NodeId;
+		PerformUpdateType PerformInsertReplace;
+		ListOfDataValue UpdateValues;
+	};
+	union ListOfUpdateStructureDataDetails switch(boolean) { case true: sequence<UpdateStructureDataDetails> Content; };
+
+	 struct DeleteRawModifiedDetails {
+		NodeId NodeId;
+		Boolean IsDeleteModified;
+		DateTime StartTime;
+		DateTime EndTime;
+	};
+	union ListOfDeleteRawModifiedDetails switch(boolean) { case true: sequence<DeleteRawModifiedDetails> Content; };
+
+	 struct DeleteAtTimeDetails {
+		NodeId NodeId;
+		ListOfDateTime ReqTimes;
+	};
+	union ListOfDeleteAtTimeDetails switch(boolean) { case true: sequence<DeleteAtTimeDetails> Content; };
+
+	 struct DeleteEventDetails {
+		NodeId NodeId;
+		ListOfByteString EventIds;
+	};
+	union ListOfDeleteEventDetails switch(boolean) { case true: sequence<DeleteEventDetails> Content; };
+
+	 struct HistoryUpdateResult {
+		StatusCode StatusCode;
+		ListOfStatusCode OperationResults;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfHistoryUpdateResult switch(boolean) { case true: sequence<HistoryUpdateResult> Content; };
+
+	 struct HistoryUpdateRequest {
+		RequestHeader RequestHeader;
+		ListOfExtensionObject HistoryUpdateDetails;
+	};
+	union ListOfHistoryUpdateRequest switch(boolean) { case true: sequence<HistoryUpdateRequest> Content; };
+
+	 struct HistoryUpdateResponse {
+		ResponseHeader ResponseHeader;
+		ListOfHistoryUpdateResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfHistoryUpdateResponse switch(boolean) { case true: sequence<HistoryUpdateResponse> Content; };
+
+	 struct CallMethodRequest {
+		NodeId ObjectId;
+		NodeId MethodId;
+		ListOfVariant InputArguments;
+	};
+	union ListOfCallMethodRequest switch(boolean) { case true: sequence<CallMethodRequest> Content; };
+
+	 struct CallMethodResult {
+		StatusCode StatusCode;
+		ListOfStatusCode InputArgumentResults;
+		ListOfDiagnosticInfo InputArgumentDiagnosticInfos;
+		ListOfVariant OutputArguments;
+	};
+	union ListOfCallMethodResult switch(boolean) { case true: sequence<CallMethodResult> Content; };
+
+	 struct CallRequest {
+		RequestHeader RequestHeader;
+		ListOfCallMethodRequest MethodsToCall;
+	};
+	union ListOfCallRequest switch(boolean) { case true: sequence<CallRequest> Content; };
+
+	 struct CallResponse {
+		ResponseHeader ResponseHeader;
+		ListOfCallMethodResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfCallResponse switch(boolean) { case true: sequence<CallResponse> Content; };
+
+	enum MonitoringMode {
+		MonitoringMode_Disabled, 
+		MonitoringMode_Sampling, 
+		MonitoringMode_Reporting
+	};
+	union ListOfMonitoringMode switch(boolean) { case true: sequence<MonitoringMode> Content; };
+
+	enum DataChangeTrigger {
+		DataChangeTrigger_Status, 
+		DataChangeTrigger_StatusValue, 
+		DataChangeTrigger_StatusValueTimestamp
+	};
+	union ListOfDataChangeTrigger switch(boolean) { case true: sequence<DataChangeTrigger> Content; };
+
+	enum DeadbandType {
+		DeadbandType_None, 
+		DeadbandType_Absolute, 
+		DeadbandType_Percent
+	};
+	union ListOfDeadbandType switch(boolean) { case true: sequence<DeadbandType> Content; };
+
+	 struct DataChangeFilter {
+		DataChangeTrigger Trigger;
+		UInt32 DeadbandType;
+		Double DeadbandValue;
+	};
+	union ListOfDataChangeFilter switch(boolean) { case true: sequence<DataChangeFilter> Content; };
+
+	 struct EventFilter {
+		ListOfSimpleAttributeOperand SelectClauses;
+		ContentFilter WhereClause;
+	};
+	union ListOfEventFilter switch(boolean) { case true: sequence<EventFilter> Content; };
+
+	 struct AggregateConfiguration {
+		Boolean UseServerCapabilitiesDefaults;
+		Boolean TreatUncertainAsBad;
+		Byte PercentDataBad;
+		Byte PercentDataGood;
+		Boolean UseSlopedExtrapolation;
+	};
+	union ListOfAggregateConfiguration switch(boolean) { case true: sequence<AggregateConfiguration> Content; };
+
+	 struct AggregateFilter {
+		DateTime StartTime;
+		NodeId AggregateType;
+		Double ProcessingInterval;
+		AggregateConfiguration AggregateConfiguration;
+	};
+	union ListOfAggregateFilter switch(boolean) { case true: sequence<AggregateFilter> Content; };
+
+	 struct EventFilterResult {
+		ListOfStatusCode SelectClauseResults;
+		ListOfDiagnosticInfo SelectClauseDiagnosticInfos;
+		ContentFilterResult WhereClauseResult;
+	};
+	union ListOfEventFilterResult switch(boolean) { case true: sequence<EventFilterResult> Content; };
+
+	 struct AggregateFilterResult {
+		DateTime RevisedStartTime;
+		Double RevisedProcessingInterval;
+		AggregateConfiguration RevisedAggregateConfiguration;
+	};
+	union ListOfAggregateFilterResult switch(boolean) { case true: sequence<AggregateFilterResult> Content; };
+
+	 struct MonitoringParameters {
+		UInt32 ClientHandle;
+		Double SamplingInterval;
+		ExtensionObject Filter;
+		UInt32 QueueSize;
+		Boolean DiscardOldest;
+	};
+	union ListOfMonitoringParameters switch(boolean) { case true: sequence<MonitoringParameters> Content; };
+
+	 struct MonitoredItemCreateRequest {
+		ReadValueId ItemToMonitor;
+		MonitoringMode MonitoringMode;
+		MonitoringParameters RequestedParameters;
+	};
+	union ListOfMonitoredItemCreateRequest switch(boolean) { case true: sequence<MonitoredItemCreateRequest> Content; };
+
+	 struct MonitoredItemCreateResult {
+		StatusCode StatusCode;
+		UInt32 MonitoredItemId;
+		Double RevisedSamplingInterval;
+		UInt32 RevisedQueueSize;
+		ExtensionObject FilterResult;
+	};
+	union ListOfMonitoredItemCreateResult switch(boolean) { case true: sequence<MonitoredItemCreateResult> Content; };
+
+	 struct CreateMonitoredItemsRequest {
+		RequestHeader RequestHeader;
+		UInt32 SubscriptionId;
+		TimestampsToReturn TimestampsToReturn;
+		ListOfMonitoredItemCreateRequest ItemsToCreate;
+	};
+	union ListOfCreateMonitoredItemsRequest switch(boolean) { case true: sequence<CreateMonitoredItemsRequest> Content; };
+
+	 struct CreateMonitoredItemsResponse {
+		ResponseHeader ResponseHeader;
+		ListOfMonitoredItemCreateResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfCreateMonitoredItemsResponse switch(boolean) { case true: sequence<CreateMonitoredItemsResponse> Content; };
+
+	 struct MonitoredItemModifyRequest {
+		UInt32 MonitoredItemId;
+		MonitoringParameters RequestedParameters;
+	};
+	union ListOfMonitoredItemModifyRequest switch(boolean) { case true: sequence<MonitoredItemModifyRequest> Content; };
+
+	 struct MonitoredItemModifyResult {
+		StatusCode StatusCode;
+		Double RevisedSamplingInterval;
+		UInt32 RevisedQueueSize;
+		ExtensionObject FilterResult;
+	};
+	union ListOfMonitoredItemModifyResult switch(boolean) { case true: sequence<MonitoredItemModifyResult> Content; };
+
+	 struct ModifyMonitoredItemsRequest {
+		RequestHeader RequestHeader;
+		UInt32 SubscriptionId;
+		TimestampsToReturn TimestampsToReturn;
+		ListOfMonitoredItemModifyRequest ItemsToModify;
+	};
+	union ListOfModifyMonitoredItemsRequest switch(boolean) { case true: sequence<ModifyMonitoredItemsRequest> Content; };
+
+	 struct ModifyMonitoredItemsResponse {
+		ResponseHeader ResponseHeader;
+		ListOfMonitoredItemModifyResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfModifyMonitoredItemsResponse switch(boolean) { case true: sequence<ModifyMonitoredItemsResponse> Content; };
+
+	 struct SetMonitoringModeRequest {
+		RequestHeader RequestHeader;
+		UInt32 SubscriptionId;
+		MonitoringMode MonitoringMode;
+		ListOfUInt32 MonitoredItemIds;
+	};
+	union ListOfSetMonitoringModeRequest switch(boolean) { case true: sequence<SetMonitoringModeRequest> Content; };
+
+	 struct SetMonitoringModeResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfSetMonitoringModeResponse switch(boolean) { case true: sequence<SetMonitoringModeResponse> Content; };
+
+	 struct SetTriggeringRequest {
+		RequestHeader RequestHeader;
+		UInt32 SubscriptionId;
+		UInt32 TriggeringItemId;
+		ListOfUInt32 LinksToAdd;
+		ListOfUInt32 LinksToRemove;
+	};
+	union ListOfSetTriggeringRequest switch(boolean) { case true: sequence<SetTriggeringRequest> Content; };
+
+	 struct SetTriggeringResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode AddResults;
+		ListOfDiagnosticInfo AddDiagnosticInfos;
+		ListOfStatusCode RemoveResults;
+		ListOfDiagnosticInfo RemoveDiagnosticInfos;
+	};
+	union ListOfSetTriggeringResponse switch(boolean) { case true: sequence<SetTriggeringResponse> Content; };
+
+	 struct DeleteMonitoredItemsRequest {
+		RequestHeader RequestHeader;
+		UInt32 SubscriptionId;
+		ListOfUInt32 MonitoredItemIds;
+	};
+	union ListOfDeleteMonitoredItemsRequest switch(boolean) { case true: sequence<DeleteMonitoredItemsRequest> Content; };
+
+	 struct DeleteMonitoredItemsResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfDeleteMonitoredItemsResponse switch(boolean) { case true: sequence<DeleteMonitoredItemsResponse> Content; };
+
+	 struct CreateSubscriptionRequest {
+		RequestHeader RequestHeader;
+		Double RequestedPublishingInterval;
+		UInt32 RequestedLifetimeCount;
+		UInt32 RequestedMaxKeepAliveCount;
+		UInt32 MaxNotificationsPerPublish;
+		Boolean PublishingEnabled;
+		Byte Priority;
+	};
+	union ListOfCreateSubscriptionRequest switch(boolean) { case true: sequence<CreateSubscriptionRequest> Content; };
+
+	 struct CreateSubscriptionResponse {
+		ResponseHeader ResponseHeader;
+		UInt32 SubscriptionId;
+		Double RevisedPublishingInterval;
+		UInt32 RevisedLifetimeCount;
+		UInt32 RevisedMaxKeepAliveCount;
+	};
+	union ListOfCreateSubscriptionResponse switch(boolean) { case true: sequence<CreateSubscriptionResponse> Content; };
+
+	 struct ModifySubscriptionRequest {
+		RequestHeader RequestHeader;
+		UInt32 SubscriptionId;
+		Double RequestedPublishingInterval;
+		UInt32 RequestedLifetimeCount;
+		UInt32 RequestedMaxKeepAliveCount;
+		UInt32 MaxNotificationsPerPublish;
+		Byte Priority;
+	};
+	union ListOfModifySubscriptionRequest switch(boolean) { case true: sequence<ModifySubscriptionRequest> Content; };
+
+	 struct ModifySubscriptionResponse {
+		ResponseHeader ResponseHeader;
+		Double RevisedPublishingInterval;
+		UInt32 RevisedLifetimeCount;
+		UInt32 RevisedMaxKeepAliveCount;
+	};
+	union ListOfModifySubscriptionResponse switch(boolean) { case true: sequence<ModifySubscriptionResponse> Content; };
+
+	 struct SetPublishingModeRequest {
+		RequestHeader RequestHeader;
+		Boolean PublishingEnabled;
+		ListOfUInt32 SubscriptionIds;
+	};
+	union ListOfSetPublishingModeRequest switch(boolean) { case true: sequence<SetPublishingModeRequest> Content; };
+
+	 struct SetPublishingModeResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfSetPublishingModeResponse switch(boolean) { case true: sequence<SetPublishingModeResponse> Content; };
+
+	 struct NotificationMessage {
+		UInt32 SequenceNumber;
+		DateTime PublishTime;
+		ListOfExtensionObject NotificationData;
+	};
+	union ListOfNotificationMessage switch(boolean) { case true: sequence<NotificationMessage> Content; };
+
+	 struct MonitoredItemNotification {
+		UInt32 ClientHandle;
+		DataValue Value;
+	};
+	union ListOfMonitoredItemNotification switch(boolean) { case true: sequence<MonitoredItemNotification> Content; };
+
+	 struct EventFieldList {
+		UInt32 ClientHandle;
+		ListOfVariant EventFields;
+	};
+	union ListOfEventFieldList switch(boolean) { case true: sequence<EventFieldList> Content; };
+
+	 struct HistoryEventFieldList {
+		ListOfVariant EventFields;
+	};
+	union ListOfHistoryEventFieldList switch(boolean) { case true: sequence<HistoryEventFieldList> Content; };
+
+	 struct StatusChangeNotification {
+		StatusCode Status;
+		DiagnosticInfo DiagnosticInfo;
+	};
+	union ListOfStatusChangeNotification switch(boolean) { case true: sequence<StatusChangeNotification> Content; };
+
+	 struct SubscriptionAcknowledgement {
+		UInt32 SubscriptionId;
+		UInt32 SequenceNumber;
+	};
+	union ListOfSubscriptionAcknowledgement switch(boolean) { case true: sequence<SubscriptionAcknowledgement> Content; };
+
+	 struct PublishRequest {
+		RequestHeader RequestHeader;
+		ListOfSubscriptionAcknowledgement SubscriptionAcknowledgements;
+	};
+	union ListOfPublishRequest switch(boolean) { case true: sequence<PublishRequest> Content; };
+
+	 struct PublishResponse {
+		ResponseHeader ResponseHeader;
+		UInt32 SubscriptionId;
+		ListOfUInt32 AvailableSequenceNumbers;
+		Boolean MoreNotifications;
+		NotificationMessage NotificationMessage;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfPublishResponse switch(boolean) { case true: sequence<PublishResponse> Content; };
+
+	 struct RepublishRequest {
+		RequestHeader RequestHeader;
+		UInt32 SubscriptionId;
+		UInt32 RetransmitSequenceNumber;
+	};
+	union ListOfRepublishRequest switch(boolean) { case true: sequence<RepublishRequest> Content; };
+
+	 struct RepublishResponse {
+		ResponseHeader ResponseHeader;
+		NotificationMessage NotificationMessage;
+	};
+	union ListOfRepublishResponse switch(boolean) { case true: sequence<RepublishResponse> Content; };
+
+	 struct TransferResult {
+		StatusCode StatusCode;
+		ListOfUInt32 AvailableSequenceNumbers;
+	};
+	union ListOfTransferResult switch(boolean) { case true: sequence<TransferResult> Content; };
+
+	 struct TransferSubscriptionsRequest {
+		RequestHeader RequestHeader;
+		ListOfUInt32 SubscriptionIds;
+		Boolean SendInitialValues;
+	};
+	union ListOfTransferSubscriptionsRequest switch(boolean) { case true: sequence<TransferSubscriptionsRequest> Content; };
+
+	 struct TransferSubscriptionsResponse {
+		ResponseHeader ResponseHeader;
+		ListOfTransferResult Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfTransferSubscriptionsResponse switch(boolean) { case true: sequence<TransferSubscriptionsResponse> Content; };
+
+	 struct DeleteSubscriptionsRequest {
+		RequestHeader RequestHeader;
+		ListOfUInt32 SubscriptionIds;
+	};
+	union ListOfDeleteSubscriptionsRequest switch(boolean) { case true: sequence<DeleteSubscriptionsRequest> Content; };
+
+	 struct DeleteSubscriptionsResponse {
+		ResponseHeader ResponseHeader;
+		ListOfStatusCode Results;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfDeleteSubscriptionsResponse switch(boolean) { case true: sequence<DeleteSubscriptionsResponse> Content; };
+
+	 struct BuildInfo {
+		String ProductUri;
+		String ManufacturerName;
+		String ProductName;
+		String SoftwareVersion;
+		String BuildNumber;
+		DateTime BuildDate;
+	};
+	union ListOfBuildInfo switch(boolean) { case true: sequence<BuildInfo> Content; };
+
+	enum RedundancySupport {
+		RedundancySupport_None, 
+		RedundancySupport_Cold, 
+		RedundancySupport_Warm, 
+		RedundancySupport_Hot, 
+		RedundancySupport_Transparent, 
+		RedundancySupport_HotAndMirrored
+	};
+	union ListOfRedundancySupport switch(boolean) { case true: sequence<RedundancySupport> Content; };
+
+	enum ServerState {
+		ServerState_Running, 
+		ServerState_Failed, 
+		ServerState_NoConfiguration, 
+		ServerState_Suspended, 
+		ServerState_Shutdown, 
+		ServerState_Test, 
+		ServerState_CommunicationFault, 
+		ServerState_Unknown
+	};
+	union ListOfServerState switch(boolean) { case true: sequence<ServerState> Content; };
+
+	 struct RedundantServerDataType {
+		String ServerId;
+		Byte ServiceLevel;
+		ServerState ServerState;
+	};
+	union ListOfRedundantServerDataType switch(boolean) { case true: sequence<RedundantServerDataType> Content; };
+
+	 struct EndpointUrlListDataType {
+		ListOfString EndpointUrlList;
+	};
+	union ListOfEndpointUrlListDataType switch(boolean) { case true: sequence<EndpointUrlListDataType> Content; };
+
+	 struct NetworkGroupDataType {
+		String ServerUri;
+		ListOfEndpointUrlListDataType NetworkPaths;
+	};
+	union ListOfNetworkGroupDataType switch(boolean) { case true: sequence<NetworkGroupDataType> Content; };
+
+	 struct SamplingIntervalDiagnosticsDataType {
+		Double SamplingInterval;
+		UInt32 MonitoredItemCount;
+		UInt32 MaxMonitoredItemCount;
+		UInt32 DisabledMonitoredItemCount;
+	};
+	union ListOfSamplingIntervalDiagnosticsDataType switch(boolean) { case true: sequence<SamplingIntervalDiagnosticsDataType> Content; };
+
+	 struct ServerDiagnosticsSummaryDataType {
+		UInt32 ServerViewCount;
+		UInt32 CurrentSessionCount;
+		UInt32 CumulatedSessionCount;
+		UInt32 SecurityRejectedSessionCount;
+		UInt32 RejectedSessionCount;
+		UInt32 SessionTimeoutCount;
+		UInt32 SessionAbortCount;
+		UInt32 CurrentSubscriptionCount;
+		UInt32 CumulatedSubscriptionCount;
+		UInt32 PublishingIntervalCount;
+		UInt32 SecurityRejectedRequestsCount;
+		UInt32 RejectedRequestsCount;
+	};
+	union ListOfServerDiagnosticsSummaryDataType switch(boolean) { case true: sequence<ServerDiagnosticsSummaryDataType> Content; };
+
+	 struct ServerStatusDataType {
+		DateTime StartTime;
+		DateTime CurrentTime;
+		ServerState State;
+		BuildInfo BuildInfo;
+		UInt32 SecondsTillShutdown;
+		LocalizedText ShutdownReason;
+	};
+	union ListOfServerStatusDataType switch(boolean) { case true: sequence<ServerStatusDataType> Content; };
+
+	 struct SessionSecurityDiagnosticsDataType {
+		NodeId SessionId;
+		String ClientUserIdOfSession;
+		ListOfString ClientUserIdHistory;
+		String AuthenticationMechanism;
+		String Encoding;
+		String TransportProtocol;
+		MessageSecurityMode SecurityMode;
+		String SecurityPolicyUri;
+		ByteString ClientCertificate;
+	};
+	union ListOfSessionSecurityDiagnosticsDataType switch(boolean) { case true: sequence<SessionSecurityDiagnosticsDataType> Content; };
+
+	 struct ServiceCounterDataType {
+		UInt32 TotalCount;
+		UInt32 ErrorCount;
+	};
+	union ListOfServiceCounterDataType switch(boolean) { case true: sequence<ServiceCounterDataType> Content; };
+
+	 struct StatusResult {
+		StatusCode StatusCode;
+		DiagnosticInfo DiagnosticInfo;
+	};
+	union ListOfStatusResult switch(boolean) { case true: sequence<StatusResult> Content; };
+
+	 struct SubscriptionDiagnosticsDataType {
+		NodeId SessionId;
+		UInt32 SubscriptionId;
+		Byte Priority;
+		Double PublishingInterval;
+		UInt32 MaxKeepAliveCount;
+		UInt32 MaxLifetimeCount;
+		UInt32 MaxNotificationsPerPublish;
+		Boolean PublishingEnabled;
+		UInt32 ModifyCount;
+		UInt32 EnableCount;
+		UInt32 DisableCount;
+		UInt32 RepublishRequestCount;
+		UInt32 RepublishMessageRequestCount;
+		UInt32 RepublishMessageCount;
+		UInt32 TransferRequestCount;
+		UInt32 TransferredToAltClientCount;
+		UInt32 TransferredToSameClientCount;
+		UInt32 PublishRequestCount;
+		UInt32 DataChangeNotificationsCount;
+		UInt32 EventNotificationsCount;
+		UInt32 NotificationsCount;
+		UInt32 LatePublishRequestCount;
+		UInt32 CurrentKeepAliveCount;
+		UInt32 CurrentLifetimeCount;
+		UInt32 UnacknowledgedMessageCount;
+		UInt32 DiscardedMessageCount;
+		UInt32 MonitoredItemCount;
+		UInt32 DisabledMonitoredItemCount;
+		UInt32 MonitoringQueueOverflowCount;
+		UInt32 NextSequenceNumber;
+		UInt32 EventQueueOverFlowCount;
+	};
+	union ListOfSubscriptionDiagnosticsDataType switch(boolean) { case true: sequence<SubscriptionDiagnosticsDataType> Content; };
+
+	enum ModelChangeStructureVerbMask {
+		ModelChangeStructureVerbMask_NodeAdded, 
+		ModelChangeStructureVerbMask_NodeDeleted, 
+		ModelChangeStructureVerbMask_ReferenceAdded, 
+		ModelChangeStructureVerbMask_ReferenceDeleted, 
+		ModelChangeStructureVerbMask_DataTypeChanged
+	};
+	union ListOfModelChangeStructureVerbMask switch(boolean) { case true: sequence<ModelChangeStructureVerbMask> Content; };
+
+	 struct ModelChangeStructureDataType {
+		NodeId Affected;
+		NodeId AffectedType;
+		Byte Verb;
+	};
+	union ListOfModelChangeStructureDataType switch(boolean) { case true: sequence<ModelChangeStructureDataType> Content; };
+
+	 struct SemanticChangeStructureDataType {
+		NodeId Affected;
+		NodeId AffectedType;
+	};
+	union ListOfSemanticChangeStructureDataType switch(boolean) { case true: sequence<SemanticChangeStructureDataType> Content; };
+
+	 struct Range {
+		Double Low;
+		Double High;
+	};
+	union ListOfRange switch(boolean) { case true: sequence<Range> Content; };
+
+	 struct EUInformation {
+		String NamespaceUri;
+		Int32 UnitId;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+	};
+	union ListOfEUInformation switch(boolean) { case true: sequence<EUInformation> Content; };
+
+	enum AxisScaleEnumeration {
+		AxisScaleEnumeration_Linear, 
+		AxisScaleEnumeration_Log, 
+		AxisScaleEnumeration_Ln
+	};
+	union ListOfAxisScaleEnumeration switch(boolean) { case true: sequence<AxisScaleEnumeration> Content; };
+
+	 struct ComplexNumberType {
+		Float Real;
+		Float Imaginary;
+	};
+	union ListOfComplexNumberType switch(boolean) { case true: sequence<ComplexNumberType> Content; };
+
+	 struct DoubleComplexNumberType {
+		Double Real;
+		Double Imaginary;
+	};
+	union ListOfDoubleComplexNumberType switch(boolean) { case true: sequence<DoubleComplexNumberType> Content; };
+
+	 struct AxisInformation {
+		EUInformation EngineeringUnits;
+		Range EURange;
+		LocalizedText Title;
+		AxisScaleEnumeration AxisScaleType;
+		ListOfDouble AxisSteps;
+	};
+	union ListOfAxisInformation switch(boolean) { case true: sequence<AxisInformation> Content; };
+
+	 struct XVType {
+		Double X;
+		Float Value;
+	};
+	union ListOfXVType switch(boolean) { case true: sequence<XVType> Content; };
+
+	 struct ProgramDiagnosticDataType {
+		NodeId CreateSessionId;
+		String CreateClientName;
+		DateTime InvocationCreationTime;
+		DateTime LastTransitionTime;
+		String LastMethodCall;
+		NodeId LastMethodSessionId;
+		ListOfArgument LastMethodInputArguments;
+		ListOfArgument LastMethodOutputArguments;
+		DateTime LastMethodCallTime;
+		StatusResult LastMethodReturnStatus;
+	};
+	union ListOfProgramDiagnosticDataType switch(boolean) { case true: sequence<ProgramDiagnosticDataType> Content; };
+
+	 struct Annotation {
+		String Message;
+		String UserName;
+		DateTime AnnotationTime;
+	};
+	union ListOfAnnotation switch(boolean) { case true: sequence<Annotation> Content; };
+
+	enum ExceptionDeviationFormat {
+		ExceptionDeviationFormat_AbsoluteValue, 
+		ExceptionDeviationFormat_PercentOfRange, 
+		ExceptionDeviationFormat_PercentOfValue, 
+		ExceptionDeviationFormat_PercentOfEURange, 
+		ExceptionDeviationFormat_Unknown
+	};
+	union ListOfExceptionDeviationFormat switch(boolean) { case true: sequence<ExceptionDeviationFormat> Content; };
+
+	 struct Node {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+	};
+	union ListOfNode switch(boolean) { case true: sequence<Node> Content; };
+
+	 struct InstanceNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+	};
+	union ListOfInstanceNode switch(boolean) { case true: sequence<InstanceNode> Content; };
+
+	 struct TypeNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+	};
+	union ListOfTypeNode switch(boolean) { case true: sequence<TypeNode> Content; };
+
+	 struct ObjectNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Byte EventNotifier;
+	};
+	union ListOfObjectNode switch(boolean) { case true: sequence<ObjectNode> Content; };
+
+	 struct ObjectTypeNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Boolean IsAbstract;
+	};
+	union ListOfObjectTypeNode switch(boolean) { case true: sequence<ObjectTypeNode> Content; };
+
+	 struct VariableNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Variant Value;
+		NodeId DataType;
+		Int32 ValueRank;
+		ListOfUInt32 ArrayDimensions;
+		Byte AccessLevel;
+		Byte UserAccessLevel;
+		Double MinimumSamplingInterval;
+		Boolean Historizing;
+	};
+	union ListOfVariableNode switch(boolean) { case true: sequence<VariableNode> Content; };
+
+	 struct VariableTypeNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Variant Value;
+		NodeId DataType;
+		Int32 ValueRank;
+		ListOfUInt32 ArrayDimensions;
+		Boolean IsAbstract;
+	};
+	union ListOfVariableTypeNode switch(boolean) { case true: sequence<VariableTypeNode> Content; };
+
+	 struct ReferenceTypeNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Boolean IsAbstract;
+		Boolean Symmetric;
+		LocalizedText InverseName;
+	};
+	union ListOfReferenceTypeNode switch(boolean) { case true: sequence<ReferenceTypeNode> Content; };
+
+	 struct MethodNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Boolean Executable;
+		Boolean UserExecutable;
+	};
+	union ListOfMethodNode switch(boolean) { case true: sequence<MethodNode> Content; };
+
+	 struct ViewNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Boolean ContainsNoLoops;
+		Byte EventNotifier;
+	};
+	union ListOfViewNode switch(boolean) { case true: sequence<ViewNode> Content; };
+
+	 struct DataTypeNode {
+		NodeId NodeId;
+		NodeClass NodeClass;
+		QualifiedName BrowseName;
+		LocalizedText DisplayName;
+		LocalizedText Description;
+		UInt32 WriteMask;
+		UInt32 UserWriteMask;
+		ListOfReferenceNode References;
+		Boolean IsAbstract;
+	};
+	union ListOfDataTypeNode switch(boolean) { case true: sequence<DataTypeNode> Content; };
+
+	 struct ReadEventDetails {
+		UInt32 NumValuesPerNode;
+		DateTime StartTime;
+		DateTime EndTime;
+		EventFilter Filter;
+	};
+	union ListOfReadEventDetails switch(boolean) { case true: sequence<ReadEventDetails> Content; };
+
+	 struct ReadProcessedDetails {
+		DateTime StartTime;
+		DateTime EndTime;
+		Double ProcessingInterval;
+		ListOfNodeId AggregateType;
+		AggregateConfiguration AggregateConfiguration;
+	};
+	union ListOfReadProcessedDetails switch(boolean) { case true: sequence<ReadProcessedDetails> Content; };
+
+	 struct ModificationInfo {
+		DateTime ModificationTime;
+		HistoryUpdateType UpdateType;
+		String UserName;
+	};
+	union ListOfModificationInfo switch(boolean) { case true: sequence<ModificationInfo> Content; };
+
+	 struct HistoryModifiedData {
+		ListOfDataValue DataValues;
+		ListOfModificationInfo ModificationInfos;
+	};
+	union ListOfHistoryModifiedData switch(boolean) { case true: sequence<HistoryModifiedData> Content; };
+
+	 struct HistoryEvent {
+		ListOfHistoryEventFieldList Events;
+	};
+	union ListOfHistoryEvent switch(boolean) { case true: sequence<HistoryEvent> Content; };
+
+	 struct UpdateEventDetails {
+		NodeId NodeId;
+		PerformUpdateType PerformInsertReplace;
+		EventFilter Filter;
+		ListOfHistoryEventFieldList EventData;
+	};
+	union ListOfUpdateEventDetails switch(boolean) { case true: sequence<UpdateEventDetails> Content; };
+
+	 struct HistoryUpdateEventResult {
+		StatusCode StatusCode;
+		EventFilterResult EventFilterResult;
+	};
+	union ListOfHistoryUpdateEventResult switch(boolean) { case true: sequence<HistoryUpdateEventResult> Content; };
+
+	 struct DataChangeNotification {
+		ListOfMonitoredItemNotification MonitoredItems;
+		ListOfDiagnosticInfo DiagnosticInfos;
+	};
+	union ListOfDataChangeNotification switch(boolean) { case true: sequence<DataChangeNotification> Content; };
+
+	 struct EventNotificationList {
+		ListOfEventFieldList Events;
+	};
+	union ListOfEventNotificationList switch(boolean) { case true: sequence<EventNotificationList> Content; };
+
+	 struct SessionDiagnosticsDataType {
+		NodeId SessionId;
+		String SessionName;
+		ApplicationDescription ClientDescription;
+		String ServerUri;
+		String EndpointUrl;
+		ListOfString LocaleIds;
+		Double ActualSessionTimeout;
+		UInt32 MaxResponseMessageSize;
+		DateTime ClientConnectionTime;
+		DateTime ClientLastContactTime;
+		UInt32 CurrentSubscriptionsCount;
+		UInt32 CurrentMonitoredItemsCount;
+		UInt32 CurrentPublishRequestsInQueue;
+		ServiceCounterDataType TotalRequestCount;
+		UInt32 UnauthorizedRequestCount;
+		ServiceCounterDataType ReadCount;
+		ServiceCounterDataType HistoryReadCount;
+		ServiceCounterDataType WriteCount;
+		ServiceCounterDataType HistoryUpdateCount;
+		ServiceCounterDataType CallCount;
+		ServiceCounterDataType CreateMonitoredItemsCount;
+		ServiceCounterDataType ModifyMonitoredItemsCount;
+		ServiceCounterDataType SetMonitoringModeCount;
+		ServiceCounterDataType SetTriggeringCount;
+		ServiceCounterDataType DeleteMonitoredItemsCount;
+		ServiceCounterDataType CreateSubscriptionCount;
+		ServiceCounterDataType ModifySubscriptionCount;
+		ServiceCounterDataType SetPublishingModeCount;
+		ServiceCounterDataType PublishCount;
+		ServiceCounterDataType RepublishCount;
+		ServiceCounterDataType TransferSubscriptionsCount;
+		ServiceCounterDataType DeleteSubscriptionsCount;
+		ServiceCounterDataType AddNodesCount;
+		ServiceCounterDataType AddReferencesCount;
+		ServiceCounterDataType DeleteNodesCount;
+		ServiceCounterDataType DeleteReferencesCount;
+		ServiceCounterDataType BrowseCount;
+		ServiceCounterDataType BrowseNextCount;
+		ServiceCounterDataType TranslateBrowsePathsToNodeIdsCount;
+		ServiceCounterDataType QueryFirstCount;
+		ServiceCounterDataType QueryNextCount;
+		ServiceCounterDataType RegisterNodesCount;
+		ServiceCounterDataType UnregisterNodesCount;
+	};
+	union ListOfSessionDiagnosticsDataType switch(boolean) { case true: sequence<SessionDiagnosticsDataType> Content; };
+
+};
